@@ -12,9 +12,22 @@ const MPStart = () => {
   const webcamRef = useRef<Webcam>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const dispatch = useDispatch()
-  const [gest, setGest] = useState("NA")
+  const [gestR, setGestR] = useState("NA")
+  const [gestL, setGestL] = useState("NA")
 
   const setDirection = (direction: number) => dispatch(changeDirection(direction)) 
+  function getShape(grec: GRec, hand: Array<any>){ 
+    let newGest: any = "NA"
+    const gestState = [grec.orientation(hand), grec.fingCurve(hand,1), grec.fingCurve(hand,2), grec.fingCurve(hand,3), grec.fingCurve(hand,4), grec.fingCurve(hand,5)].join("")
+    switch(gestState){
+    case ("fISSSS"): newGest = "fire";break
+      case ("sIAAAA"): case ("sOAAAA"): newGest =  "water"; break
+      case ("fISCCS"): case ("fOSCCS"): newGest =  "lightning"; break
+      case ("fOSSCC"): newGest =  "grass"; break
+      case ("fOCCCC"): let tDir = grec.direction(grec.atob(hand[1], hand[4])); console.log(tDir); newGest = tDir==="s" ? "down": tDir==="n" ? "up": newGest; break
+      default: newGest = "NA"
+  } 
+    return newGest;}
 
   useEffect(() => {
     const holistic = new Holistic({
@@ -48,6 +61,7 @@ const MPStart = () => {
   }, [])
 
   const onResults = (results: any) => {
+    let dirChanged: boolean=false
     if (!canvasRef.current) return
 
     const canvasCtx = canvasRef.current.getContext('2d')
@@ -63,23 +77,21 @@ const MPStart = () => {
       canvasRef.current.height
     )
 
-    if (results.poseLandmarks) {
-      const grec: GRec = new GRec()
-      const hand: Array<any> = results.rightHandLandmarks
-      let newGest: any = "NA"
-      const gestState = [grec.orientation(hand), grec.fingCurve(hand,1), grec.fingCurve(hand,2), grec.fingCurve(hand,3), grec.fingCurve(hand,4), grec.fingCurve(hand,5)].join("")
-      console.log(gestState)
-      switch(gestState){
-        case ("fISSSS"): newGest = "fire";break
-        case ("sIAAAA"): case ("sOAAAA"): newGest =  "water"; break
-        case ("fISCCS"): case ("fOSCCS"): newGest =  "lightning"; break
-        case ("fOSSCC"): newGest =  "grass"; break
-        case ("fOCCCC"): let tDir = grec.direction(grec.atob(hand[0], hand[4])); newGest = tDir==="s" ? "down": tDir==="n" ? "up": newGest; break
-        default: "NA"
+    if (results.rightHandLandmarks) {
+      let newGestR: any = getShape(new GRec, results.rightHandLandmarks)
+      if (newGestR!=gestR){
+        if (newGestR==="up"||newGestR==="down")
+          dirChanged=true
+        setDirection(newGestR==="up" ? 1: newGestR==="down" ? -1:0)
+        setGestR(newGestR)
+      }
     }
-      if (newGest!=gest){
-        setDirection(newGest==="up" ? 1: newGest==="down" ? -1:0)
-        setGest(newGest)
+    if (results.leftHandLandmarks) {
+      let newGestL: any = getShape(new GRec, results.leftHandLandmarks)
+      if (newGestL!=gestL){
+        if ((newGestL==="up"||newGestL==="down")&&!dirChanged)
+            setDirection(newGestL==="up" ? 1: newGestL==="down" ? -1:0)
+        setGestL(newGestL)
       }
     }
 
@@ -87,13 +99,13 @@ const MPStart = () => {
   }
 
   return (
-    <div  className="full-size">
-      <canvas ref={canvasRef} className="full-size">
-        <Webcam audio={false} ref={webcamRef} height="700px"
-        width="1080px"/>
-        <CommVisualiser command = {gest} />
+    <div  className="cam">
+      <canvas ref={canvasRef} className="cam-canvas">
+        <Webcam audio={false} mirrored= {false}ref={webcamRef}/>
       </canvas>
-      <div className="gest">{gest}</div>
+      <CommVisualiser gestR={gestR} gestL={gestL} />
+      <div className="gestR">{gestR}</div>
+      <div className="gestL">{gestL}</div>
     </div>
   )
 }

@@ -1,26 +1,22 @@
-.full-size{
-  width: 100%;
-  height: 100%;
-}
-
 .main-scene{
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 
-#root {
-  min-height: 700px;
-  min-width: 1000px;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.gest{
+.gestL{
   position: fixed;
   top: 0;
   left: 0;
+  width: 100px;
+  height: 50px;
+  font-size: 20px;
+  background-color: aliceblue;
+  color: blue;
+}
+.gestR{
+  position: fixed;
+  top: 0;
+  left: 100px;
   width: 100px;
   height: 50px;
   font-size: 20px;
@@ -34,9 +30,17 @@
     left: 0;
     width: 100px;
     height: 100px;
-   
+    z-index: 1;
 }
 
 .command-visualizer img{
-  width: 100%;;
+  width: 100%;
+}
+
+.cam{
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
 }

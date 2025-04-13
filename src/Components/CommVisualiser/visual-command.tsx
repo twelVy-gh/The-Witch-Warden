@@ -1,13 +1,15 @@
 import ImageHelper from "../../helpers/GestHelper"
 
-type Props= {command:string}
+type Props= {gestR:string, gestL:string}
 
-const CommVisualiser = ({command}: Props) => {
+const CommVisualiser = ({gestR, gestL}: Props) => {
       const imageHelper = new ImageHelper()
-      const commandImage = imageHelper.getCommandVisualization(command)
+      const comImageR = imageHelper.getCommandVisualization(gestR)
+      const comImageL = imageHelper.getCommandVisualization(gestL)
     return (
         <div className="command-visualizer">
-            <img src={commandImage} alt="command"/>
+            <img src={comImageR} alt="command"/>
+            <img src={comImageL} alt="command"/>
         </div>
     )
 }

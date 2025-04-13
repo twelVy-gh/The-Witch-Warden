@@ -16,26 +16,25 @@ class GRec{
     return "NA"
     }
 
-    direction(v: any){
+    direction(v: Vector2){
         const ang = (v.angle()) * 180 / Math.PI
-        console.log("d ", ang)
         switch (true){
             case (ang<=22.5):
                 return "e"
             case (22.5<ang && ang<=67.5):
-                return "ne"
+                return "se"
             case (67.5<ang && ang<=112.5):
-                return "n"
+                return "s"
             case (112.5<ang && ang<=157.5):
-                return "nw"
+                return "sw"
             case (157.5<ang && ang<=202.5):
                 return "w"
             case (202.5<ang && ang<=247.5):
-                return "sw"
+                return "nw"
             case (247.5<ang && ang<=292.5):
-                return "s"
+                return "n"
             case (292.5<ang && ang<=337.5):
-                return "se"
+                return "ne"
             case (337.5<ang):
                 return "e"
         }
@@ -54,7 +53,7 @@ class GRec{
                 let phal1 = this.atob(hand[n*4-3],hand[n*4-2])
                 let phal2 = this.atob(hand[n*4-2],hand[n*4-1])
                 let avgAngle: number = (this.normal(hand).angleTo(phal1) * 180 / Math.PI + phal1.angleTo(phal2) * 180 / Math.PI)/2
-                if (avgAngle<55){
+                if (avgAngle<75){
                     if(avgAngle<25){
                         return "S"
                     }
@@ -64,7 +63,6 @@ class GRec{
             }
             else if (n===1){
                 let nangle: number = (this.atob(hand[1], hand[4]).angleTo(this.normal(hand))) * 180 / Math.PI
-                console.log("t ",nangle)
                 if (nangle>10){
                     return "O"
                 }
@@ -89,7 +87,6 @@ class GRec{
             else if (n===1){
                 let nangle: number = (this.atob(hand[1], hand[4]).angleTo(this.normal(hand))) * 180 / Math.PI
                 let sangle: number = (this.atob(hand[1], hand[4]).angleTo(this.atob(hand[0],hand[17]))) * 180 / Math.PI
-                console.log("t ",nangle,sangle)
                 if (sangle < 10){
                     return "I"
                 }
