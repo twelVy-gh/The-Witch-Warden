@@ -8,8 +8,8 @@ const CommVisualiser = ({gestR, gestL}: Props) => {
       const comImageL = imageHelper.getCommandVisualization(gestL)
     return (
         <div className="command-visualizer">
-            <img src={comImageR} alt="command"/>
             <img src={comImageL} alt="command"/>
+            <img src={comImageR} alt="command"/>
         </div>
     )
 }

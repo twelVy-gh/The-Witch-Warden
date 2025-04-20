@@ -3,8 +3,9 @@ import {Canvas} from "@react-three/fiber";
 import {Plane, OrthographicCamera} from "@react-three/drei";
 import { useSelector } from 'react-redux'
 import {selectGameObjects} from "../../Store/Parts/game-objects"
-import SpriteObject from "../SpriteAnimatedObject/sprite-animated-object";
-import StaticObject from "../StaticAnimatedObject/static-animated-object";
+import SpriteObject from "../Sprites/EnemySprite/enemy-sprite";
+import EnemyObject from "../GameObjects/EnemyObject/enemy-object";
+import WitchSpriteObject from "../Sprites/WitchSprite/witch-sprite";
 //import SpriteMetadata from "../../assets/animations/TOLSTYAK/spritesheet.json"
  
 // Размеры сцены и квадрата
@@ -24,16 +25,17 @@ const Scene = () => {
   return (
     <div className="main-scene">
       {/* Здесь задаются параметры, которые отвечают за стилизацию сцены */}
-      <Canvas className="container" style={{...sceneSizes, background: "grey"}}>
+      <Canvas className="container" style={{...sceneSizes}}>
         {/* Камера задаётся по аналогии с нативной three.js, но нужно задать параметр makeDefault, 
         чтобы применить именно её, а не камеру заданную по умолчанию */}
         <OrthographicCamera makeDefault position={[100, 0, 1]} />
+        <WitchSpriteObject/>
      
 
 
-      { objects.map( (obj: any, index: number) => {
-            if(obj['type'] === "sprite-animations") return <SpriteObject key = {index} {...obj}/>
-            if(obj['type'] === "static-animations") return <StaticObject key = {index} {...obj}/>
+        {     
+      objects.map( (obj: EnemyObject) => {
+            return <SpriteObject key = {obj.uuid} obj={obj} />
       })  
       }
 

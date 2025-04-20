@@ -20,12 +20,12 @@ const MPStart = () => {
     let newGest: any = "NA"
     const gestState = [grec.orientation(hand), grec.fingCurve(hand,1), grec.fingCurve(hand,2), grec.fingCurve(hand,3), grec.fingCurve(hand,4), grec.fingCurve(hand,5)].join("")
     switch(gestState){
-    case ("fISSSS"): newGest = "fire";break
+      case ("fISSSS"): newGest = "fire";break
       case ("sIAAAA"): case ("sOAAAA"): newGest =  "water"; break
       case ("fISCCS"): case ("fOSCCS"): newGest =  "lightning"; break
       case ("fOSSCC"): newGest =  "grass"; break
       case ("fOCCCC"): let tDir = grec.direction(grec.atob(hand[1], hand[4])); console.log(tDir); newGest = tDir==="s" ? "down": tDir==="n" ? "up": newGest; break
-      default: newGest = "NA"
+      default: newGest = "NA";
   } 
     return newGest;}
 
@@ -93,6 +93,9 @@ const MPStart = () => {
             setDirection(newGestL==="up" ? 1: newGestL==="down" ? -1:0)
         setGestL(newGestL)
       }
+    }
+    if(!results.leftHandLandmarks&&!results.rightHandLandmarks){
+      setDirection(0)
     }
 
     canvasCtx.restore()

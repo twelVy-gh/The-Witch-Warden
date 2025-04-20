@@ -28,13 +28,13 @@
     position: fixed;
     top: 50px;
     left: 0;
-    width: 100px;
+    width: 200px;
     height: 100px;
     z-index: 1;
 }
 
 .command-visualizer img{
-  width: 100%;
+  width: 50%;
 }
 
 .cam{
