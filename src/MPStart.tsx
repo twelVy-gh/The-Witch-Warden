@@ -1,12 +1,13 @@
 import { useRef, useEffect, useState } from 'react'
 import Webcam from 'react-webcam'
 import { Holistic } from '@mediapipe/holistic'
-import { useDispatch } from 'react-redux'
-import { changeDirection } from "./Store/Parts/command"
+import { useDispatch, useSelector } from 'react-redux'
+import { changeDirection, changeUserAction } from "./Store/Parts/command"
 import { Camera } from '@mediapipe/camera_utils'
 import "./MPStart.css"
 import GRec from './GRec/GRec.tsx'
 import CommVisualiser from './Components/CommVisualiser'
+import { selectUserAction, isNowFire } from './Store/Parts/command'
 
 const MPStart = () => {
   const webcamRef = useRef<Webcam>(null)
@@ -15,7 +16,12 @@ const MPStart = () => {
   const [gestR, setGestR] = useState("NA")
   const [gestL, setGestL] = useState("NA")
 
+   const  userAction  = useSelector(selectUserAction)
+   let  isFire  = useSelector(isNowFire)
+
   const setDirection = (direction: number) => dispatch(changeDirection(direction)) 
+  const changeAction = (actionCode: number) => dispatch(changeUserAction(actionCode)) 
+  
   function getShape(grec: GRec, hand: Array<any>){ 
     let newGest: any = "NA"
     const gestState = [grec.orientation(hand), grec.fingCurve(hand,1), grec.fingCurve(hand,2), grec.fingCurve(hand,3), grec.fingCurve(hand,4), grec.fingCurve(hand,5)].join("")
@@ -28,6 +34,7 @@ const MPStart = () => {
       default: newGest = "NA";
   } 
     return newGest;}
+  
 
   useEffect(() => {
     const holistic = new Holistic({
@@ -48,7 +55,7 @@ const MPStart = () => {
     if (webcamRef.current?.video) {
       camera = new Camera(webcamRef.current.video, {
         onFrame: async () => {
-          await holistic.send({ image: webcamRef.current!.video! })
+             await holistic.send({ image: webcamRef.current!.video! })
         },
       })
       camera.start()
@@ -61,44 +68,55 @@ const MPStart = () => {
   }, [])
 
   const onResults = (results: any) => {
-    let dirChanged: boolean=false
-    if (!canvasRef.current) return
+      let dirChanged: boolean=false
+      if (!canvasRef.current) return
 
-    const canvasCtx = canvasRef.current.getContext('2d')
-    if (!canvasCtx) return
+      const canvasCtx = canvasRef.current.getContext('2d')
+      if (!canvasCtx) return
 
-    canvasCtx.save()
-    canvasCtx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
-    canvasCtx.drawImage(
-      results.image,
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    )
-
-    if (results.rightHandLandmarks) {
-      let newGestR: any = getShape(new GRec, results.rightHandLandmarks)
-      if (newGestR!=gestR){
-        if (newGestR==="up"||newGestR==="down")
-          dirChanged=true
-        setDirection(newGestR==="up" ? 1: newGestR==="down" ? -1:0)
-        setGestR(newGestR)
+      canvasCtx.save()
+      canvasCtx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+      canvasCtx.drawImage(
+        results.image,
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height
+      )
+      
+      if(!results.leftHandLandmarks&&!results.rightHandLandmarks){
+        changeAction(0)
+        setGestR("NA")
+        setGestL("NA")
+        return
       }
-    }
-    if (results.leftHandLandmarks) {
-      let newGestL: any = getShape(new GRec, results.leftHandLandmarks)
-      if (newGestL!=gestL){
-        if ((newGestL==="up"||newGestL==="down")&&!dirChanged)
-            setDirection(newGestL==="up" ? 1: newGestL==="down" ? -1:0)
-        setGestL(newGestL)
+      let newGestR, newGestL
+      if (results.rightHandLandmarks) {
+        newGestR = getShape(new GRec, results.rightHandLandmarks)
+        if (newGestR!=gestR){
+          if (newGestR==="up"||newGestR==="down")
+            dirChanged=true
+          changeAction(newGestR==="up" ? 1: newGestR==="down" ? -1:0)
+          setGestR(newGestR)
+           if(newGestR === "fire"){
+              changeAction(2)
+          }
+        }
+        
       }
-    }
-    if(!results.leftHandLandmarks&&!results.rightHandLandmarks){
-      setDirection(0)
-    }
+      if (results.leftHandLandmarks) {
+         newGestL = getShape(new GRec, results.leftHandLandmarks)
+        if (newGestL!=gestL){
+          if ((newGestL==="up"||newGestL==="down")&&!dirChanged)
+            changeAction(newGestL==="up" ? 1: newGestL==="down" ? -1:0)
+          setGestL(newGestL)
+          if(newGestR !== "fire" && newGestL === "fire"){
+            changeAction(2)
+        }
+        }
+      }
 
-    canvasCtx.restore()
+      canvasCtx.restore()
   }
 
   return (

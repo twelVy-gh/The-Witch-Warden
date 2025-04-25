@@ -1,12 +1,15 @@
-import {useState} from "react";
+import { useState} from "react";
 import {Canvas} from "@react-three/fiber";
-import {Plane, OrthographicCamera} from "@react-three/drei";
+import { OrthographicCamera} from "@react-three/drei";
 import { useSelector } from 'react-redux'
-import {selectGameObjects} from "../../Store/Parts/game-objects"
-import SpriteObject from "../Sprites/EnemySprite/enemy-sprite";
-import EnemyObject from "../GameObjects/EnemyObject/enemy-object";
+import {selectGameObjects, selectBombObjects, selectExplosionObjects} from "../../Store/Parts/game-objects"
+import EnemySpriteObject from "../Sprites/EnemySprite/enemy-sprite";
+import EnemyObject from "../../GameObjects/EnemyObject/enemy-object";
 import WitchSpriteObject from "../Sprites/WitchSprite/witch-sprite";
-//import SpriteMetadata from "../../assets/animations/TOLSTYAK/spritesheet.json"
+import BombObject from "../../GameObjects/BombObject/bomb-object";
+import BombSpriteObject from "../Sprites/BombSprite/bomb-sprite";
+import ExplosionObject from "../../GameObjects/ExplosionObject/explosion-object";
+import ExplosionSpriteObject from "../Sprites/ExplosionSprite/explosion-sprite";
  
 // Размеры сцены и квадрата
 const sceneSizes = {width: "100%", height: "100%"};
@@ -14,28 +17,40 @@ const sceneSizes = {width: "100%", height: "100%"};
  
 const Scene = () => {
   const [color, colorChange] = useState("blue"); // Состояние отвечает за цвет квадрата
- 
+
+   
   // Handler служит для того, чтобы
   const colorChangeHandler = () => {
     // Просто поочерёдно меняем цвет с серого на синий и с синего на белый
     colorChange((prevColor) => (prevColor === "white" ? "blue" : "white"));
   };
   const objects = useSelector(selectGameObjects)
+  const bullets = useSelector(selectBombObjects)
+  const explosions = useSelector(selectExplosionObjects)
 
+ 
+   
   return (
     <div className="main-scene">
-      {/* Здесь задаются параметры, которые отвечают за стилизацию сцены */}
-      <Canvas className="container" style={{...sceneSizes}}>
-        {/* Камера задаётся по аналогии с нативной three.js, но нужно задать параметр makeDefault, 
-        чтобы применить именно её, а не камеру заданную по умолчанию */}
-        <OrthographicCamera makeDefault position={[100, 0, 1]} />
+      <Canvas className="container"  >
+        <OrthographicCamera makeDefault position={[0, 0, 1]} />
         <WitchSpriteObject/>
-     
-
 
         {     
       objects.map( (obj: EnemyObject) => {
-            return <SpriteObject key = {obj.uuid} obj={obj} />
+            return <EnemySpriteObject key = {obj.uuid} obj={obj} />
+      })  
+      }
+
+     {     
+      bullets.map( (b: BombObject) => {
+            return <BombSpriteObject key = {b.uuid} obj={b} />
+      })  
+      }
+
+{     
+      explosions.map( (e: ExplosionObject) => {
+            return <ExplosionSpriteObject key = {e.uuid} obj={e} />
       })  
       }
 

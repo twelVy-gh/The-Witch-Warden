@@ -7,6 +7,9 @@ export default configureStore({
 	reducer: {
         commands: commandsSlice,
         game_objects: gameObjectSlice
-    }
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false
+      }),
 }
 )
