@@ -16,9 +16,6 @@ const MPStart = () => {
   const [gestR, setGestR] = useState("NA")
   const [gestL, setGestL] = useState("NA")
 
-   const  userAction  = useSelector(selectUserAction)
-   let  isFire  = useSelector(isNowFire)
-
   const setDirection = (direction: number) => dispatch(changeDirection(direction)) 
   const changeAction = (actionCode: number) => dispatch(changeUserAction(actionCode)) 
   
@@ -30,6 +27,7 @@ const MPStart = () => {
       case ("sIAAAA"): case ("sOAAAA"): newGest =  "water"; break
       case ("fISCCS"): case ("fOSCCS"): newGest =  "lightning"; break
       case ("fOSSCC"): newGest =  "grass"; break
+      case ("fICCCC"): newGest = "rock";break
       case ("fOCCCC"): let tDir = grec.direction(grec.atob(hand[1], hand[4])); console.log(tDir); newGest = tDir==="s" ? "down": tDir==="n" ? "up": newGest; break
       default: newGest = "NA";
   } 
@@ -50,7 +48,7 @@ const MPStart = () => {
     })
 
     holistic.onResults(onResults)
-
+    
     let camera: Camera | null = null
     if (webcamRef.current?.video) {
       camera = new Camera(webcamRef.current.video, {
@@ -98,11 +96,7 @@ const MPStart = () => {
             dirChanged=true
           changeAction(newGestR==="up" ? 1: newGestR==="down" ? -1:0)
           setGestR(newGestR)
-           if(newGestR === "fire"){
-              changeAction(2)
-          }
-        }
-        
+        }  
       }
       if (results.leftHandLandmarks) {
          newGestL = getShape(new GRec, results.leftHandLandmarks)
@@ -110,10 +104,14 @@ const MPStart = () => {
           if ((newGestL==="up"||newGestL==="down")&&!dirChanged)
             changeAction(newGestL==="up" ? 1: newGestL==="down" ? -1:0)
           setGestL(newGestL)
-          if(newGestR !== "fire" && newGestL === "fire"){
-            changeAction(2)
         }
-        }
+      }
+      
+
+      switch(newGestL+" "+newGestR){
+        case "fire fire": changeAction(2);break;
+        case "water water": changeAction(4);break;
+        case "rock rock": changeAction(3);break;
       }
 
       canvasCtx.restore()
@@ -122,7 +120,7 @@ const MPStart = () => {
   return (
     <div  className="cam">
       <canvas ref={canvasRef} className="cam-canvas">
-        <Webcam audio={false} mirrored= {false}ref={webcamRef}/>
+        <Webcam audio={false} mirrored={true}ref={webcamRef}/>
       </canvas>
       <CommVisualiser gestR={gestR} gestL={gestL} />
       <div className="gestR">{gestR}</div>

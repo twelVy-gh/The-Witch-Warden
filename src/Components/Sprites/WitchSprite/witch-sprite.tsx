@@ -33,6 +33,7 @@ function WitchSpriteObject() {
   const speed: number = 6;
   let {size} =  useThree();
   const [pos, setPos] = useState(0)
+  //const [fps, setFPS] = useState(10)
   // const  direction  = useSelector(selectDirection)
   const  userAction  = useSelector(selectUserAction)
   const [curAnim, setCurAnim] = useState("witch")
@@ -47,21 +48,43 @@ function WitchSpriteObject() {
   const  isFire  = useSelector(isNowFire)
  
  
-  let  createBomb = useCallback(throttle((action: number, p:number, bombCreator: any) => {
+  let  createFire = useCallback(throttle((action: number, p:number, bombCreator: any) => {
       const objFactory = getOrCreateObjectFactory()
       const bomb: BombObject|null = objFactory.produceBomb(action, p);
       if(bomb)
         bombCreator(bomb)
         }, 500
-      ), [])
+      ), []);
+
+  let  createBoulder = useCallback(throttle((action: number, p:number, bombCreator: any) => {
+      const objFactory = getOrCreateObjectFactory()
+      const bomb: BombObject|null = objFactory.produceBomb(action, p);
+      if(bomb)
+        bombCreator(bomb)
+        }, 1000
+      ), []);
+
+  let  createWave = useCallback(throttle((action: number, p:number, bombCreator: any) => {
+      const objFactory = getOrCreateObjectFactory()
+      const bomb: BombObject|null = objFactory.produceBomb(action, p);
+      if(bomb)
+        bombCreator(bomb)
+        }, 2000
+      ), []);
 
   useEffect(()=>{
     const anim: string = selectAnimation(userAction)
-      setCurAnim(anim)   
+    setCurAnim(anim)  
+    //let fps:number = 10
+    // switch(userAction){
+    //   case 3: fps = 8; break
+    //   case 4: fps = 6; break
+    // }
+    // setFPS(fps)
+
   }, [userAction])    
   
   useFrame(({ clock }) => {
-    // const a = clock.getElapsedTime();
     if(pos < -size.height/2)
       setPos(size.height/2)
     if(pos > size.height/2)
@@ -72,9 +95,13 @@ function WitchSpriteObject() {
   });
 
 
-  if(isFire && createBomb != undefined){
+  if(isFire && createFire != undefined&&createWave != undefined&&createBoulder != undefined){
     playSound("shot");
-    createBomb(userAction, pos, addNewBomb)
+    switch (userAction){
+      case 2: createFire(userAction,pos,addNewBomb); break
+      case 3: createBoulder(userAction,pos,addNewBomb); break
+      case 4: createWave(userAction,pos,addNewBomb); break
+    }
   }
   return (
         <mesh ref={myMesh}  position={[-size.width/2+60, pos  , 0]}>

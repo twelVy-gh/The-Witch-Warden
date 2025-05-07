@@ -40,8 +40,8 @@ const gameObjectSlice = createSlice({
 			const bomb:BombObject = action.payload.bomb;
 			const enemy:EnemyObject = action.payload.enemy;
             state.score += action.payload.award
-
-			state.gameBombList = state.gameBombList.filter( obj => {return obj.uuid !== bomb.uuid})
+			bomb.injured.push(enemy.uuid)
+			if (bomb.type!="wave") state.gameBombList = state.gameBombList.filter( obj => {return obj.uuid !== bomb.uuid})
 			if(enemy.life === 0){
 				state.gameObjectsList = state.gameObjectsList.filter( obj => {return obj.uuid !== enemy.uuid})
 			}		

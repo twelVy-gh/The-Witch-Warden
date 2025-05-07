@@ -39,7 +39,7 @@ function ExplosionSpriteObject({obj}:SpriteObjectProps) {
         <mesh ref={explosionMesh} position={[obj.xPos,  obj.yPos , 0.1]}>
         <SpriteAnimator 
             visible={true}
-            scale={[5, 5, 5]}
+            scale={[8, 8, 8]}
             position={[0, 0   , 0]}
             autoPlay={true}
             loop={true}

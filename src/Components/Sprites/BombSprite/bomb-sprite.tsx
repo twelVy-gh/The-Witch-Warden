@@ -23,7 +23,7 @@ function BombSpriteObject({obj}:SpriteObjectProps) {
     useFrame(({ clock }) => {
       if(pos > size.width/2)
         destroy(obj)
-      setPos(pos => { return pos + 6})
+      setPos(pos => { return pos + obj.speed})
       bombMesh.current.position.x = pos;
     });
 
@@ -36,7 +36,7 @@ function BombSpriteObject({obj}:SpriteObjectProps) {
         <mesh ref={bombMesh} position={[pos,  obj.yPos , 0.1]}>
         <SpriteAnimator 
             visible={true}
-            scale={[5, 5, 5]}
+            scale={[4.5*obj.size, 4.5*obj.size, 4.5*obj.size]}
             position={[0, 0   , 0]}
             autoPlay={true}
             loop={true}

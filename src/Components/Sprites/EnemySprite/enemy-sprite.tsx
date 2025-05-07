@@ -9,17 +9,16 @@ import { useDispatch } from 'react-redux'
 import { deleteEnemy } from "../../../Store/Parts/game-objects";
 import { selectBombObjects, woundEnemy } from "../../../Store/Parts/game-objects";
 import BombObject from "../../../GameObjects/BombObject/bomb-object";
-import { Box3, Vector3 } from "three";
 import { getOrCreateObjectFactory } from "../../../Util/ObjectFactory/object-factory";
 import ExplosionObject from "../../../GameObjects/ExplosionObject/explosion-object";
 import { addExplosion } from "../../../Store/Parts/game-objects";
+import { indexOf } from "lodash";
 
 
 
 
 type SpriteObjectProps = {
     obj: EnemyObject;
-  
   };
   
 
@@ -38,7 +37,7 @@ function EnemySpriteObject({obj}:SpriteObjectProps) {
     useFrame(({ clock }) => {
       findIntersection(obj, bullets)
       // const a = clock.getElapsedTime();
-      if(pos < 0)
+      if(pos < -size.width/4)
         killEnemy(obj)
       setPos(pos => { return pos - obj.speed})
       enemyMesh.current.position.x = pos;
@@ -46,32 +45,28 @@ function EnemySpriteObject({obj}:SpriteObjectProps) {
 
     const findIntersection = (enemy: EnemyObject, bullets: BombObject[]) => {
       const enemyMesh: Mesh|undefined = enemy.refMesh?.current
-       const enemyBox = new Box3();
+      
      
       if(enemyMesh){
-        enemyBox.setFromObject(enemyMesh);
+        enemy.box.setFromObject(enemyMesh);
         bullets.forEach((bullet: BombObject) => {
-          const bulletMesh: Mesh|undefined = bullet.refMesh?.current
-          const bombBox = new Box3();
-          if( bulletMesh && enemyBox){
-            bombBox.setFromObject(bulletMesh);
-            
-            if(bombBox.intersectsBox(enemyBox)){
-              const enemyCenter:Vector3 = new Vector3() ;
-              enemyBox.getCenter(enemyCenter);
-              const bombCenter:Vector3=new Vector3();
-              bombBox.getCenter(bombCenter);
-              if(bombCenter.distanceTo(enemyCenter)<enemy.size){
-                const award = enemy.injury(bullet)
-                if(enemy.life === 0) {
-                  const objFactory = getOrCreateObjectFactory();
-                  
-                  const explosion:ExplosionObject = objFactory.produceExplosion(enemyCenter.x, enemyCenter.y);
-                  
-                  makeExplosion(explosion)
+          if (indexOf(bullet.injured,enemy.uuid)===-1){
+            const bulletMesh: Mesh|undefined = bullet.refMesh?.current
+            if( bulletMesh && enemy.box){
+              bullet.box.setFromObject(bulletMesh);
+              enemy.box.getCenter(enemy.center);
+              bullet.box.getCenter(bullet.center); 
+              if(bullet.center.distanceTo(enemy.center)<(enemy.size+bullet.size*10)){
+                  const award = enemy.injury(bullet)
+                  if(enemy.life === 0) {
+                    const objFactory = getOrCreateObjectFactory();
+                    
+                    const explosion:ExplosionObject = objFactory.produceExplosion(enemy.center.x, enemy.center.y);
+                    
+                    makeExplosion(explosion)
+                  }
+                  injuryEnemy(enemy, bullet, award)
                 }
-                injuryEnemy(enemy, bullet, award)
-              }
             }
           }
         })
@@ -83,11 +78,11 @@ function EnemySpriteObject({obj}:SpriteObjectProps) {
   const textureDataURL = `/animations/enemies/${obj.type}/meta.json`
     return (
         <mesh ref={enemyMesh} position={[pos, size.height/2 - obj.yPos / 100 * size.height , 0]}>
-        <mesh position={[2, 30, 0]}>
+        <mesh position={[0, 30, 0]}>
            <boxGeometry args={[(obj.lifeMax/2)+4, 10, 1]} />
            <meshBasicMaterial color="#000000"/>
         </mesh>
-        <mesh position={[2, 30, 0]}>
+        <mesh position={[(obj.lifeMax-obj.life)/4, 30, 0]}>
            <boxGeometry args={[obj.life/2, 6, 1]} />
            <meshBasicMaterial color="#00ff00"/>
         </mesh>

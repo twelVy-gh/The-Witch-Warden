@@ -18,9 +18,9 @@ class ObjectFactory {
 
     produceBomb(type: number, yPos: number): BombObject | null {
       switch (type) {
-        case 1 :  return new BombObject("fireball", yPos); break;
-        case 2 :  return new BombObject("boulder", yPos); break;
-        case 3 :  return new BombObject("wave", yPos); break;
+        case 2 :  return new BombObject("fireball", yPos); break;
+        case 3 :  return new BombObject("boulder", yPos); break;
+        case 4 :  return new BombObject("wave", yPos); break;
       }
       return null;
  }
