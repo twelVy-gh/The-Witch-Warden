@@ -4,23 +4,23 @@ import ExplosionObject from "../../GameObjects/ExplosionObject/explosion-object"
 
 class ObjectFactory {
     produceEnemy(): EnemyObject {
-         const yPos: number = Math.floor(Math.random() * 100)
+         const yPos: number = Math.floor(Math.random() * 10)*10
         const type =  Math.random()
-        if( type < 0.3)
-           return new EnemyObject("enemy1", yPos);
+        if( type < 0.33)
+           return new EnemyObject("golem", yPos);
         else
-         if( type < 0.6)
-          return new EnemyObject("enemy2", yPos);
+         if( type < 0.66)
+          return new EnemyObject("skeleton", yPos);
          else
-           return new EnemyObject("enemy3", yPos);
+           return new EnemyObject("plant", yPos);
     }
 
 
     produceBomb(type: number, yPos: number): BombObject | null {
       switch (type) {
-        case 1 :  return new BombObject("bullet1", yPos); break;
-        case 2 :  return new BombObject("bullet2", yPos); break;
-        case 3 :  return new BombObject("bullet3", yPos); break;
+        case 1 :  return new BombObject("fireball", yPos); break;
+        case 2 :  return new BombObject("boulder", yPos); break;
+        case 3 :  return new BombObject("wave", yPos); break;
       }
       return null;
  }

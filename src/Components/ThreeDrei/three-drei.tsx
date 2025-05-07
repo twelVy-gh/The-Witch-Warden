@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import {selectGameObjects} from "../../Store/Parts/game-objects"
 import SpriteObject from "../SpriteAnimatedObject/sprite-animated-object";
 import StaticObject from "../StaticAnimatedObject/static-animated-object";
-import EnemyObject from "../GameObjects/EnemyObject/enemy-object";
+import EnemyObject from "src/GameObjects/EnemyObject/enemy-object.ts";
 
 
 //import SpriteMetadata from "../../assets/animations/TOLSTYAK/spritesheet.json"

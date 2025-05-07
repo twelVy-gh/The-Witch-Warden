@@ -9,6 +9,7 @@ const sounds: Map<string, string> = new Map([
     if(sound){
       const audio   = new Audio();
       audio.src = sound;
+      audio.volume=0.05;
       audio.play();
     }
 

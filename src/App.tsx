@@ -21,7 +21,7 @@ function App() {
         const objFactory = getOrCreateObjectFactory()
         const id = setInterval(()=>{
           const p: number = Math.floor(Math.random() * 100)
-          if(p < 20) {
+          if(p < 10) {
               const enemy:EnemyObject = objFactory.produceEnemy();
               addNewEnemy(enemy)
           }

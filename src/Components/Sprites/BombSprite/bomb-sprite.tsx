@@ -15,14 +15,14 @@ type SpriteObjectProps = {
 
 function BombSpriteObject({obj}:SpriteObjectProps) {
   let {size} =  useThree();
-  const [pos, setPos] = useState(-size.width/2 + 30)
+  const [pos, setPos] = useState(-size.width/2 + 70)
     const bombMesh = useRef<Mesh>(null!);
     obj.refMesh = bombMesh;
     const dispatch = useDispatch()
-    const killEnemy = (enemy: BombObject) => dispatch(deleteBomb(enemy)) 
+    const destroy = (bomb: BombObject) => dispatch(deleteBomb(bomb)) 
     useFrame(({ clock }) => {
       if(pos > size.width/2)
-        killEnemy(obj)
+        destroy(obj)
       setPos(pos => { return pos + 6})
       bombMesh.current.position.x = pos;
     });

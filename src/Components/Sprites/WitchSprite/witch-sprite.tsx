@@ -30,6 +30,7 @@ const selectAnimation = (userAction: number):string=>{
 
 
 function WitchSpriteObject() {
+  const speed: number = 6;
   let {size} =  useThree();
   const [pos, setPos] = useState(0)
   // const  direction  = useSelector(selectDirection)
@@ -66,7 +67,7 @@ function WitchSpriteObject() {
     if(pos > size.height/2)
       setPos(-  size.height/2)
     const direction = userAction == -1 || userAction == 1 ? userAction : 0
-    setPos(pos => { return pos + direction})
+    setPos(pos => { return pos + direction*speed})
     myMesh.current.position.y = pos;
   });
 
@@ -76,16 +77,16 @@ function WitchSpriteObject() {
     createBomb(userAction, pos, addNewBomb)
   }
   return (
-        <mesh ref={myMesh}  position={[-size.width/2+20, pos  , 0]}>
+        <mesh ref={myMesh}  position={[-size.width/2+60, pos  , 0]}>
 
         <SpriteAnimator 
             visible={true}
             scale={[10, 10, 10]}
-            position={[0, 0   , 0]}
+            position={[0, 0  , 0]}
             autoPlay={true}
             loop={true}
             startFrame={0}
-            fps={5}
+            fps={10}
             asSprite={false}
             rotation={[0, 0, 0]}
             alphaTest={0.001}

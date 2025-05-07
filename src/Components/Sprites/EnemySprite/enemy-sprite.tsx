@@ -40,7 +40,7 @@ function EnemySpriteObject({obj}:SpriteObjectProps) {
       // const a = clock.getElapsedTime();
       if(pos < 0)
         killEnemy(obj)
-      setPos(pos => { return pos - 0.1})
+      setPos(pos => { return pos - obj.speed})
       enemyMesh.current.position.x = pos;
     });
 
@@ -57,17 +57,21 @@ function EnemySpriteObject({obj}:SpriteObjectProps) {
             bombBox.setFromObject(bulletMesh);
             
             if(bombBox.intersectsBox(enemyBox)){
+              const enemyCenter:Vector3 = new Vector3() ;
+              enemyBox.getCenter(enemyCenter);
+              const bombCenter:Vector3=new Vector3();
+              bombBox.getCenter(bombCenter);
+              if(bombCenter.distanceTo(enemyCenter)<enemy.size){
                 const award = enemy.injury(bullet)
                 if(enemy.life === 0) {
-                 const objFactory = getOrCreateObjectFactory();
-                  const center:Vector3 = new Vector3() ;
-                  enemyBox.getCenter(center)
-                  const explosion:ExplosionObject = objFactory.produceExplosion(center.x, center.y);
-                 
+                  const objFactory = getOrCreateObjectFactory();
+                  
+                  const explosion:ExplosionObject = objFactory.produceExplosion(enemyCenter.x, enemyCenter.y);
+                  
                   makeExplosion(explosion)
                 }
                 injuryEnemy(enemy, bullet, award)
-
+              }
             }
           }
         })
@@ -78,22 +82,24 @@ function EnemySpriteObject({obj}:SpriteObjectProps) {
   const textureImageURL = `/animations/enemies/${obj.type}/texture.png`
   const textureDataURL = `/animations/enemies/${obj.type}/meta.json`
     return (
-        <mesh ref={enemyMesh} position={[pos, size.height/2 - obj.yPos / 100 * size.height  , 0]}>
-        <mesh position={[2, 15, 0]}>
-           <boxGeometry args={[obj.life/10, 3, 1]} />
+        <mesh ref={enemyMesh} position={[pos, size.height/2 - obj.yPos / 100 * size.height , 0]}>
+        <mesh position={[2, 30, 0]}>
+           <boxGeometry args={[(obj.lifeMax/2)+4, 10, 1]} />
+           <meshBasicMaterial color="#000000"/>
+        </mesh>
+        <mesh position={[2, 30, 0]}>
+           <boxGeometry args={[obj.life/2, 6, 1]} />
            <meshBasicMaterial color="#00ff00"/>
         </mesh>
         <SpriteAnimator 
             visible={true}
-            scale={[3.6, 2.4, 3]}
+            scale={[8, 8, 8]}
             position={[0, 0   , 0]}
-            
             autoPlay={true}
             loop={true}
             startFrame={0}
-            fps={12}
+            fps={10}
             asSprite={false}
-            flipX={true}
             rotation={[0, 0, 0]}
             alphaTest={0.001}
             textureImageURL={textureImageURL}

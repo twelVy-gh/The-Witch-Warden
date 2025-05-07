@@ -7,12 +7,21 @@ class EnemyObject {
     type: EnemyType;
     yPos: number;
     life: number;
+    lifeMax: number;
+    speed: number;
+    size: number;
     uuid: string;
     refMesh: React.RefObject<Mesh>|null;
     constructor(type: EnemyType, yPos: number) {
           this.type = type;
           this.yPos = yPos;
-          this.life = 100;
+          switch(type){
+            case "golem": this.lifeMax=100; this.speed = 0.5;this.size = 50; break;
+            case "skeleton": this.lifeMax=50; this.speed = 3;this.size = 30; break;
+            case "plant": this.lifeMax= 80; this.speed = 1;this.size = 30; break;
+            default: this.lifeMax=70; this.speed = 1;this.size = 40; break;
+          }
+          this.life=this.lifeMax;
           this.uuid = uuidv4();
           this.refMesh = null;
       }
@@ -21,15 +30,14 @@ class EnemyObject {
         let damage: number = 0
         let award: number = 0
         switch(bomb.type){
-            case "bullet1": damage = 20; break;
-            case "bullet2": damage = 30; break;
-            case "bullet1": damage = 40; break;
-        }   
-        award = damage;
+            case "fireball": damage = 20; break;
+            case "boulder": damage = 40; break;
+            case "wave": damage = 30; break;
+        }
         this.life -= damage
         if(this.life <= 0){
             this.life = 0;
-            award +=50;
+            award +=100;
         }
         return award;
     }

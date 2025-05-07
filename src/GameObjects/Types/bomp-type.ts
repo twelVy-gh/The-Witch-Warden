@@ -1,2 +1,2 @@
-export type BombType = "bullet1" | "bullet2" | "bullet3"
+export type BombType = "fireball" | "boulder" | "wave"
 

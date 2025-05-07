@@ -1,2 +1,2 @@
-export type EnemyType = "enemy1" | "enemy2" | "enemy3"
+export type EnemyType = "golem" | "skeleton" | "plant"
 
