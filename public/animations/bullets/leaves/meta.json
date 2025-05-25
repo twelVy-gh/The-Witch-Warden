@@ -1,5 +1,5 @@
 { "frames": {
-   "fireball 0.aseprite": {
+   "leaves 0.aseprite": {
     "frame": { "x": 0, "y": 0, "w": 24, "h": 24 },
     "rotated": false,
     "trimmed": false,
@@ -7,7 +7,7 @@
     "sourceSize": { "w": 24, "h": 24 },
     "duration": 100
    },
-   "fireball 1.aseprite": {
+   "leaves 1.aseprite": {
     "frame": { "x": 24, "y": 0, "w": 24, "h": 24 },
     "rotated": false,
     "trimmed": false,
@@ -15,7 +15,7 @@
     "sourceSize": { "w": 24, "h": 24 },
     "duration": 100
    },
-   "fireball 2.aseprite": {
+   "leaves 2.aseprite": {
     "frame": { "x": 48, "y": 0, "w": 24, "h": 24 },
     "rotated": false,
     "trimmed": false,
@@ -23,7 +23,7 @@
     "sourceSize": { "w": 24, "h": 24 },
     "duration": 100
    },
-   "fireball 3.aseprite": {
+   "leaves 3.aseprite": {
     "frame": { "x": 72, "y": 0, "w": 24, "h": 24 },
     "rotated": false,
     "trimmed": false,

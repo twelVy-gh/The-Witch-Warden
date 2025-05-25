@@ -25,17 +25,6 @@ function App() {
               const enemy:EnemyObject = objFactory.produceEnemy();
               addNewEnemy(enemy)
           }
-
-        //   const b: number = Math.floor(Math.random() * 100)
-        //   if(b < 20) {
-        //     if(b < 20)
-        //       changeAction(1)
-        //     else
-        //       if(b < 15) 
-        //         changeAction(2)
-        //       else
-        //         changeAction(3)
-        // }
         }, 1000);
         return () => clearInterval(id);
     }, [] );

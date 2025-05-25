@@ -10,6 +10,7 @@ import BombObject from "../../GameObjects/BombObject/bomb-object";
 import BombSpriteObject from "../Sprites/BombSprite/bomb-sprite";
 import ExplosionObject from "../../GameObjects/ExplosionObject/explosion-object";
 import ExplosionSpriteObject from "../Sprites/ExplosionSprite/explosion-sprite";
+import CastleHealth from "../CastleHealth";
  
 // Размеры сцены и квадрата
 const sceneSizes = {width: "100%", height: "100%"};
@@ -17,7 +18,6 @@ const sceneSizes = {width: "100%", height: "100%"};
  
 const Scene = () => {
   const [color, colorChange] = useState("blue"); // Состояние отвечает за цвет квадрата
-
    
   // Handler служит для того, чтобы
   const colorChangeHandler = () => {
@@ -35,6 +35,7 @@ const Scene = () => {
       <Canvas className="container"  >
         <OrthographicCamera makeDefault position={[0, 0, 1]} />
         <WitchSpriteObject/>
+        <CastleHealth/>
 
         {     
       objects.map( (obj: EnemyObject) => {

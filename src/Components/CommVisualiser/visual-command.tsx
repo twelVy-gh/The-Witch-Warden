@@ -1,15 +1,14 @@
 import ImageHelper from "../../helpers/GestHelper"
 
-type Props= {gestR:string, gestL:string}
+type Props= {gest:string, flip:boolean}
 
-const CommVisualiser = ({gestR, gestL}: Props) => {
+const CommVisualiser = ({gest, flip}: Props) => {
       const imageHelper = new ImageHelper()
-      const comImageR = imageHelper.getCommandVisualization(gestR)
-      const comImageL = imageHelper.getCommandVisualization(gestL)
+      const comImage = imageHelper.getCommandVisualization(gest)
+      const flippedClass = flip? "flip":""
     return (
         <div className="command-visualizer">
-            <img src={comImageL} alt="command"/>
-            <img src={comImageR} alt="command"/>
+           <img src={comImage} alt="command" className={flippedClass}/>
         </div>
     )
 }

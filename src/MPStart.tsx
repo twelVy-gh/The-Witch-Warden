@@ -25,8 +25,6 @@ const MPStart = () => {
     switch(gestState){
       case ("fISSSS"): newGest = "fire";break
       case ("sIAAAA"): case ("sOAAAA"): newGest =  "water"; break
-      case ("fISCCS"): case ("fOSCCS"): newGest =  "lightning"; break
-      case ("fOSSCC"): newGest =  "grass"; break
       case ("fICCCC"): newGest = "rock";break
       case ("fOCCCC"): let tDir = grec.direction(grec.atob(hand[1], hand[4])); console.log(tDir); newGest = tDir==="s" ? "down": tDir==="n" ? "up": newGest; break
       default: newGest = "NA";
@@ -119,12 +117,11 @@ const MPStart = () => {
 
   return (
     <div  className="cam">
+      <CommVisualiser gest={gestL} flip={false}/>
       <canvas ref={canvasRef} className="cam-canvas">
         <Webcam audio={false} mirrored={true}ref={webcamRef}/>
       </canvas>
-      <CommVisualiser gestR={gestR} gestL={gestL} />
-      <div className="gestR">{gestR}</div>
-      <div className="gestL">{gestL}</div>
+      <CommVisualiser gest={gestR} flip={true}/>
     </div>
   )
 }

@@ -25,23 +25,25 @@
 }
 
 .command-visualizer{
-    position: fixed;
-    top: 50px;
-    left: 0;
-    width: 200px;
-    height: 100px;
+    height: 200px;
     z-index: 1;
 }
 
+.flip{
+  transform: scaleX(-1);
+}
+
 .command-visualizer img{
-  width: 50%;
+  width: 200px;
 }
 
 .cam{
   display: flex;
   position: absolute;
+  justify-content: space-between;
   bottom: 0;
   right: 0;
+  left: 0;
   z-index: 1;
   opacity: 0.4;
 }

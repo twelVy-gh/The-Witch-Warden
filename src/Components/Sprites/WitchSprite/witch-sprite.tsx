@@ -50,7 +50,7 @@ function WitchSpriteObject() {
  
   let  createFire = useCallback(throttle((action: number, p:number, bombCreator: any) => {
       const objFactory = getOrCreateObjectFactory()
-      const bomb: BombObject|null = objFactory.produceBomb(action, p);
+      const bomb: BombObject|null = objFactory.produceBomb(action, p,false);
       if(bomb)
         bombCreator(bomb)
         }, 500
@@ -58,7 +58,7 @@ function WitchSpriteObject() {
 
   let  createBoulder = useCallback(throttle((action: number, p:number, bombCreator: any) => {
       const objFactory = getOrCreateObjectFactory()
-      const bomb: BombObject|null = objFactory.produceBomb(action, p);
+      const bomb: BombObject|null = objFactory.produceBomb(action, p,false);
       if(bomb)
         bombCreator(bomb)
         }, 1000
@@ -66,10 +66,10 @@ function WitchSpriteObject() {
 
   let  createWave = useCallback(throttle((action: number, p:number, bombCreator: any) => {
       const objFactory = getOrCreateObjectFactory()
-      const bomb: BombObject|null = objFactory.produceBomb(action, p);
+      const bomb: BombObject|null = objFactory.produceBomb(action, p,false);
       if(bomb)
         bombCreator(bomb)
-        }, 2000
+        }, 5000
       ), []);
 
   useEffect(()=>{
@@ -104,7 +104,7 @@ function WitchSpriteObject() {
     }
   }
   return (
-        <mesh ref={myMesh}  position={[-size.width/2+60, pos  , 0]}>
+        <mesh ref={myMesh}  position={[-size.width/2+120, pos  , 0]}>
 
         <SpriteAnimator 
             visible={true}

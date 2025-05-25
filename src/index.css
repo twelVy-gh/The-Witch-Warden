@@ -81,11 +81,10 @@ button:focus-visible {
 .score-monitor{
   position: fixed;
   z-index: 10;
-  bottom: 0;
+  top: 0;
   right: 0;
   padding: .3em;
   border: 2px solid #fff;
   border-radius: .3em;
   background-color: #fff7;
 }
-

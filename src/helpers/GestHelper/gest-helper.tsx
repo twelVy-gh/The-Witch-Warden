@@ -1,8 +1,9 @@
-import Fire from "../../assets/elements/fire.jpg"
-import Water from "../../assets/elements/water.png"
-import Lightning from "../../assets/elements/lightning.png"
-import Grass from "../../assets/elements/grass.jpg"
-import NA from "../../assets/200px-Debugempty.png"
+import Fire from "/public/textures/bracelet/fire.png"
+import Water from "/public/textures/bracelet/water.png"
+import Rock from "/public/textures/bracelet/rock.png"
+import Up from "/public/textures/bracelet/up.png"
+import Down from "/public/textures/bracelet/down.png"
+import NA from "/public/textures/bracelet/idle.png"
 
 
 
@@ -12,8 +13,9 @@ class ImageHelper {
         switch(command){
             case "fire": return Fire
             case "water": return Water
-            case "lightning": return Lightning
-            case "grass": return Grass
+            case "rock": return Rock
+            case "up": return Up
+            case "down": return Down
             default: return NA
         }
     }

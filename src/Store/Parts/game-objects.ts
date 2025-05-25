@@ -8,14 +8,16 @@ type GameObjects = {
 	gameObjectsList: EnemyObject[],
 	gameBombList: BombObject[],
 	gameExplosionList: ExplosionObject[],
-	score: number
+	score: number, 
+	health: number
 }
 
 const initialState: GameObjects = {
     gameObjectsList: [],
 	gameBombList: [],
 	gameExplosionList: [],
-	score: 0
+	score: 0,
+	health: 100
 	
 }
 
@@ -28,10 +30,11 @@ const gameObjectSlice = createSlice({
 		},
 		deleteEnemy(state, action){
 			state.gameObjectsList = state.gameObjectsList.filter( obj => {return obj.uuid !== action.payload.uuid})
-			state.score -= 20
 		},
 		addBomb(state, action) {
-			state.gameBombList = [...state.gameBombList, action.payload]
+			// const bomb = state.gameBombList.filter( obj => {return obj.uuid !== action.payload.uuid});
+			// if(bomb.length === 0)
+			     state.gameBombList = [...state.gameBombList, action.payload]
 		},
 		deleteBomb(state, action){
 			state.gameBombList = state.gameBombList.filter( obj => {return obj.uuid !== action.payload.uuid})
@@ -53,6 +56,10 @@ const gameObjectSlice = createSlice({
 			state.gameExplosionList = state.gameExplosionList.filter( obj => {return obj.uuid !== action.payload.uuid})
 			
 		},
+		damageCastle(state,action){
+			state.health-=action.payload.damage
+			state.gameBombList = state.gameBombList.filter( obj => {return obj.uuid !== action.payload.uuid})
+		},
 	}
 })
 
@@ -62,6 +69,7 @@ export const selectBombObjects = (state: any) => state.game_objects.gameBombList
 export const selectExplosionObjects = (state: any) => state.game_objects.gameExplosionList
 export const countEnemies = (state: any) => state.game_objects.gameObjectsList.length
 export const getScore = (state: any) => state.game_objects.score
+export const getHealth = (state:any)=> state.game_objects.health
 
 export const { addEnemy, 
 	           deleteEnemy, 
@@ -69,7 +77,8 @@ export const { addEnemy,
 			   deleteBomb, 
 			   woundEnemy, 
 			   addExplosion, 
-			   deleteExplosion 
+			   deleteExplosion,
+			   damageCastle
 			} = gameObjectSlice.actions
 
 export default gameObjectSlice.reducer

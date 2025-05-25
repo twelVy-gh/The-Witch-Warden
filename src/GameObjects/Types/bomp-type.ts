@@ -1,2 +1,2 @@
-export type BombType = "fireball" | "boulder" | "wave"
+export type BombType = "fireball" | "boulder" | "wave" | "skull"|"leaves"
 
