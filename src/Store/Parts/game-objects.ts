@@ -60,9 +60,15 @@ const gameObjectSlice = createSlice({
 			state.health-=action.payload.damage
 			state.gameBombList = state.gameBombList.filter( obj => {return obj.uuid !== action.payload.uuid})
 		},
+		restart(state,action){
+			state.health=100;
+			state.score =0;
+			state.gameBombList = [];
+			state.gameObjectsList=[];
+			state.gameExplosionList =[]
+		}
 	}
 })
-
 
 export const selectGameObjects = (state: any) => state.game_objects.gameObjectsList
 export const selectBombObjects = (state: any) => state.game_objects.gameBombList
@@ -78,7 +84,8 @@ export const { addEnemy,
 			   woundEnemy, 
 			   addExplosion, 
 			   deleteExplosion,
-			   damageCastle
+			   damageCastle,
+			   restart
 			} = gameObjectSlice.actions
 
 export default gameObjectSlice.reducer

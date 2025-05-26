@@ -15,7 +15,7 @@ class ObjectFactory {
     // }
     
     produceEnemy(): EnemyObject {
-        const yPos: number = Math.floor(Math.random() * 10)*8
+        const yPos: number = Math.floor(Math.random() * 20)*8
         const type =  Math.random()
         if( type < 0.33)
            return new EnemyObject("golem", yPos);
